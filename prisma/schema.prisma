@@ -1,0 +1,241 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model t_data_siswa {
+  c_no_register      BigInt
+  c_tanggal_daftar   DateTime? @db.Date
+  c_tahun_ajaran     String?   @db.VarChar(10)
+  c_nama_lengkap     String?   @db.VarChar(80)
+  c_id_gedung        Int?
+  c_id_kota          Int?
+  c_id_sekolah_kelas Int?
+  c_last_update      DateTime? @db.Timestamp(6)
+  c_id               Int       @id @default(autoincrement())
+  c_id_komar         Int?
+  c_id_sekolah       Int?
+}
+
+model t_jumlah_target {
+  c_id               Int     @id(map: "t_jumlah_target_pk")
+  c_id_sekolah_kelas Int?
+  c_tahun_ajaran     String? @db.VarChar
+  c_jumlah_soal      Int?    @map("c_jumlah-soal")
+
+  @@unique([c_id_sekolah_kelas, c_tahun_ajaran], map: "t_jumlah_target_un")
+}
+
+model t_pengerjaan_mata_uji {
+  c_no_register       String   @db.VarChar(20)
+  c_id_kelompok_ujian Int      @db.SmallInt
+  c_tanggal           DateTime @db.Date
+  c_id_jenis_produk   String   @db.VarChar(30)
+  c_jumlah_pengerjaan Int      @db.SmallInt
+  c_jumlah__benar     Int      @db.SmallInt
+  c_last_update       DateTime @default(now()) @db.Timestamptz(6)
+  c_created_at        DateTime @default(now()) @db.Timestamptz(6)
+  c_id_bundling       Int?
+  c_id                Int      @default(autoincrement())
+
+  @@id([c_no_register, c_id_kelompok_ujian, c_id_jenis_produk, c_tanggal], map: "t_pengerjaan_mata_uji_pk")
+}
+
+model t_peringkat_new {
+  c_id               Int       @id(map: "t_peringkat_new_temp_pk") @default(autoincrement())
+  c_no_register      String?   @db.Char(12)
+  c_nama_lengkap     String?   @db.VarChar(255)
+  c_total            Int       @default(0)
+  c_id_sekolah_kelas Int?
+  c_id_kota          Int?
+  c_nama_kota        String?   @db.VarChar
+  c_id_gedung        Int?
+  c_nama_gedung      String?   @db.VarChar
+  c_tahun_ajaran     String    @db.VarChar(20)
+  c_created_at       DateTime? @default(now()) @db.Timestamp(6)
+  c_last_update      DateTime? @default(now()) @db.Timestamp(6)
+  c_detil            Json?
+}
+
+model t_peringkat_new_fix {
+  c_no_register      String   @db.Char(12)
+  c_nama_lengkap     String   @db.VarChar(255)
+  c_total            Int
+  c_id_sekolah_kelas Int
+  c_id_kota          Int
+  c_nama_kota        String   @db.VarChar
+  c_id_gedung        Int
+  c_nama_gedung      String   @db.VarChar
+  c_tahun_ajaran     String   @db.VarChar(20)
+  c_created_at       DateTime @default(now()) @db.Timestamptz(6)
+  c_last_update      DateTime @default(now()) @db.Timestamptz(6)
+  c_id_bundling      Int      @default(0)
+  c_benarlevel1      Int      @default(0)
+  c_benarlevel2      Int      @default(0)
+  c_benarlevel3      Int      @default(0)
+  c_benarlevel4      Int      @default(0)
+  c_benarlevel5      Int      @default(0)
+  c_salahlevel1      Int      @default(0)
+  c_salahlevel2      Int      @default(0)
+  c_salahlevel3      Int      @default(0)
+  c_salahlevel4      Int      @default(0)
+  c_salahlevel5      Int      @default(0)
+
+  @@id([c_no_register, c_id_bundling], map: "t_peringkat_new_fix_pk")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model t_peringkat_new_temp {
+  c_no_register      String?   @db.Char(12)
+  c_nama_lengkap     String?   @db.VarChar(255)
+  c_total            Int       @default(0)
+  c_id_sekolah_kelas Int?
+  c_id_kota          Int?
+  c_nama_kota        String?   @db.VarChar
+  c_id_gedung        Int?
+  c_nama_gedung      String?   @db.VarChar
+  c_tahun_ajaran     String    @db.VarChar(20)
+  c_created_at       DateTime? @default(now()) @db.Timestamp(6)
+  c_last_update      DateTime? @default(now()) @db.Timestamp(6)
+
+  @@ignore
+}
+
+model t_peringkat_new_temporary {
+  c_no_register      String?   @db.Char(12)
+  c_nama_lengkap     String?   @db.VarChar(255)
+  c_total            Int?
+  c_id_sekolah_kelas Int?
+  c_id_kota          Int?
+  c_nama_kota        String?   @db.VarChar
+  c_id_gedung        Int?
+  c_nama_gedung      String?   @db.VarChar
+  c_tahun_ajaran     String?   @db.VarChar(20)
+  c_created_at       DateTime? @db.Timestamp(6)
+  c_last_update      DateTime? @db.Timestamp(6)
+  c_id_bundling      Int?
+  c_benarlevel1      Int?
+  c_benarlevel2      Int?
+  c_benarlevel3      Int?
+  c_benarlevel4      Int?
+  c_benarlevel5      Int?
+  c_salahlevel1      Int?
+  c_salahlevel2      Int?
+  c_salahlevel3      Int?
+  c_salahlevel4      Int?
+  c_salahlevel5      Int?
+  c_id               Int       @id(map: "t_peringkat_new_temporary_pk") @default(autoincrement())
+}
+
+model t_peringkat_racing_new {
+  c_no_register      String?   @db.Char(12)
+  c_nama_lengkap     String?   @db.VarChar(255)
+  c_kode_tob         String?   @db.VarChar(50)
+  c_kode_paket       String?   @db.VarChar(100)
+  c_skor             Int?
+  c_skor_persen      Decimal?  @db.Decimal(8, 2)
+  c_id_sekolah_kelas Int?
+  c_id_kota          Int?
+  c_nama_kota        String?   @db.VarChar
+  c_id_gedung        Int?
+  c_nama_gedung      String?   @db.VarChar
+  c_minggu           Int?
+  c_bulan            Int?
+  c_semester         Int?
+  c_tahun_ajaran     String    @db.VarChar(20)
+  c_created_at       DateTime? @default(now()) @db.Timestamptz(6)
+  c_last_update      DateTime? @default(now()) @db.Timestamptz(6)
+  c_id_bundling      Int?
+  c_id               Int       @id(map: "t_peringkat_racing_new_pk") @default(autoincrement())
+}
+
+model t_peringkat_rank {
+  c_id               Int       @id(map: "primary_peringkat_temp") @default(autoincrement())
+  c_no_register      String?   @db.VarChar(12)
+  c_nama_lengkap     String?   @db.VarChar(255)
+  c_total            Int       @default(0)
+  c_id_sekolah_kelas Int?
+  c_rank_sekolah     Int?
+  c_id_kota          Int?
+  c_rank_kota        Int?
+  c_id_gedung        Int?
+  c_rank_gedung      Int?
+  c_tahun_ajaran     String    @db.VarChar(20)
+  c_created_at       DateTime? @db.Timestamp(6)
+  c_last_update      DateTime? @default(now()) @db.Timestamp(6)
+}
+
+model t_peringkat_tobk {
+  c_no_register   String @id @db.Char(12)
+  c_nama_lengkap  String @db.VarChar
+  c_tingkat_kelas Int
+  c_benar         Int    @default(0)
+  c_salah         Int    @default(0)
+  c_kosong        Int    @default(0)
+  c_jumlah_soal   Int    @default(0)
+}
+
+model t_produk_siswa {
+  c_id_pembelian          Int       @unique(map: "unique_t_produk_siswa")
+  c_id                    Int       @id @default(autoincrement())
+  c_no_register           BigInt
+  c_tanggal_daftar        DateTime? @db.Date
+  c_id_kelas              Int?
+  c_tahun_ajaran          String?   @db.VarChar(10)
+  c_id_dikdasken          Int?
+  c_nama_lengkap          String?   @db.VarChar(80)
+  c_id_gedung             Int?
+  c_id_komar              Int?
+  c_id_kota               Int?
+  c_id_sekolah            Int?
+  c_id_sekolah_kelas      Int?
+  c_tingkat_sekolah_kelas String?   @db.VarChar(20)
+  c_id_jenis_kelas        Int?
+  c_kapasitas_max         Int?
+  c_status_bayar          String?   @db.VarChar(15)
+  c_id_bundling           Int?
+  c_kerjasama             String?   @db.Char(1)
+  c_last_update           DateTime? @default(now()) @db.Timestamp(6)
+}
+
+model t_rekap_nilai {
+  c_id_sekolah_kelas Int?      @db.SmallInt
+  c_detil            Json?
+  c_total            Int?      @default(0)
+  c_id_kota          Int?
+  c_id_gedung        Int?
+  c_tahun_ajaran     String?   @db.VarChar(20)
+  c_last_update      DateTime? @default(now()) @db.Timestamp(6)
+  c_id               Int       @id(map: "t_peringkatnew_pkey") @default(autoincrement())
+  c_created_at       DateTime? @db.Timestamp(6)
+  c_noregister       String?   @db.Char
+}
+
+model t_target_mapel {
+  c_id                Int       @id(map: "t_targetmapel_pkey") @default(autoincrement())
+  c_id_sekolah_kelas  Int?      @db.SmallInt
+  c_id_kelompok_ujian Int       @default(0)
+  c_semester          Int       @default(1) @db.SmallInt
+  c_tahun_ajaran      String    @default("") @db.VarChar(9)
+  c_persen            Int?      @db.SmallInt
+  c_last_update       DateTime? @default(now()) @db.Timestamp(6)
+  c_created_at        DateTime? @db.Timestamp(6)
+}
+
+model t_target_pengerjaan_siswa {
+  c_id_sekolah_kelas Int?      @db.SmallInt
+  c_target_harian    Int?      @db.SmallInt
+  c_total_target     Int?      @db.SmallInt
+  c_last_update      DateTime? @db.Timestamptz(6)
+  c_created_at       DateTime? @db.Timestamptz(6)
+  c_no_register      String?   @db.VarChar
+  c_id_bundling      Int?
+  c_id               Int       @id(map: "t_target_pengerjaan_siswa_pk") @default(autoincrement())
+
+  @@unique([c_id_sekolah_kelas, c_no_register], map: "unique_t_target_pengerjaan_siswa")
+  @@unique([c_id_sekolah_kelas, c_no_register], map: "unique_t_target_pengerjaan_siswa_baru_0")
+}
